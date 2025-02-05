@@ -78,6 +78,7 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+
 //Swagger em ambiente de produção
 app.UseSwagger();
 app.UseSwaggerUI();

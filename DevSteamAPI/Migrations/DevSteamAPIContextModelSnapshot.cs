@@ -22,6 +22,50 @@ namespace DevSteamAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DevSteamAPI.Models.Categoria", b =>
+                {
+                    b.Property<Guid>("CategoriaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CategoriaNome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CategoriaId");
+
+                    b.ToTable("Categorias", (string)null);
+                });
+
+            modelBuilder.Entity("DevSteamAPI.Models.Jogo", b =>
+                {
+                    b.Property<Guid>("JogoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoriaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Classificacao")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descricao")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Imagem")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("JogoNome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("JogoId");
+
+                    b.HasIndex("CategoriaId");
+
+                    b.ToTable("Jogos", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -218,6 +262,17 @@ namespace DevSteamAPI.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("DevSteamAPI.Models.Jogo", b =>
+                {
+                    b.HasOne("DevSteamAPI.Models.Categoria", "Categoria")
+                        .WithMany()
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Categoria");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DevSteamAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Usuarios : Migration
+    public partial class jogos : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,18 @@ namespace DevSteamAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categorias",
+                columns: table => new
+                {
+                    CategoriaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoriaNome = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categorias", x => x.CategoriaId);
                 });
 
             migrationBuilder.CreateTable(
@@ -156,6 +168,28 @@ namespace DevSteamAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Jogos",
+                columns: table => new
+                {
+                    JogoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JogoNome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Classificacao = table.Column<int>(type: "int", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Imagem = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoriaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Jogos", x => x.JogoId);
+                    table.ForeignKey(
+                        name: "FK_Jogos_Categorias_CategoriaId",
+                        column: x => x.CategoriaId,
+                        principalTable: "Categorias",
+                        principalColumn: "CategoriaId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -194,6 +228,11 @@ namespace DevSteamAPI.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Jogos_CategoriaId",
+                table: "Jogos",
+                column: "CategoriaId");
         }
 
         /// <inheritdoc />
@@ -215,10 +254,16 @@ namespace DevSteamAPI.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Jogos");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Categorias");
         }
     }
 }
